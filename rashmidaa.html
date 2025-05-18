@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Algorithm Comparison: Min & Max</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #f8f9fa, #e9ecef);
+      color: #212529;
+    }
+    header {
+      background-color: #343a40;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    nav {
+      margin-top: 10px;
+    }
+    nav a {
+      margin: 0 15px;
+      color: #ffc107;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    h2 {
+      color: #343a40;
+    }
+    pre {
+      background: #f1f3f5;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    #results {
+      margin-top: 20px;
+      background: #e9f7ef;
+      padding: 15px;
+      border-left: 4px solid #28a745;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Algorithm Comparison: Min & Max Finder</h1>
+    <nav>
+      <a href="#brute">Brute-Force</a>
+      <a href="#presort">Presorting</a>
+      <a href="#divide">Divide & Conquer</a>
+      <a href="#compare">Comparison</a>
+      <a href="#try">Try It</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <section id="brute">
+      <h2>Brute-Force Algorithm</h2>
+      <p>Linear scan of the array to determine the minimum and maximum values.</p>
+      <pre>
+function bruteForceMinMax(arr) {
+  let min = arr[0];
+  let max = arr[0];
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] < min) min = arr[i];
+    if (arr[i] > max) max = arr[i];
+  }
+  return {min, max};
+}
+      </pre>
+    </section>
+
+    <section id="presort">
+      <h2>Presorting-Based Algorithm</h2>
+      <p>Sorts the array and picks the first and last elements as min and max.</p>
+      <pre>
+function presortMinMax(arr) {
+  arr.sort((a, b) => a - b);
+  return {min: arr[0], max: arr[arr.length - 1]};
+}
+      </pre>
+    </section>
+
+    <section id="divide">
+      <h2>Divide-and-Conquer Algorithm</h2>
+      <p>Splits the array into halves, finds min/max recursively and combines the results.</p>
+      <pre>
+function divideAndConquerMinMax(arr, low = 0, high = arr.length - 1) {
+  if (low === high) return {min: arr[low], max: arr[low]};
+  if (high === low + 1) {
+    return arr[low] < arr[high]
+      ? {min: arr[low], max: arr[high]}
+      : {min: arr[high], max: arr[low]};
+  }
+  let mid = Math.floor((low + high) / 2);
+  let left = divideAndConquerMinMax(arr, low, mid);
+  let right = divideAndConquerMinMax(arr, mid + 1, high);
+  return {
+    min: Math.min(left.min, right.min),
+    max: Math.max(left.max, right.max)
+  };
+}
+      </pre>
+    </section>
+
+    <section id="compare">
+      <h2>Efficiency Comparison</h2>
+      <ul>
+        <li><strong>Brute-Force:</strong> O(n)</li>
+        <li><strong>Presorting-Based:</strong> O(n log n)</li>
+        <li><strong>Divide-and-Conquer:</strong> O(n)</li>
+      </ul>
+      <p>Use brute-force for small/medium arrays. Divide-and-conquer is optimal in terms of comparisons. Presorting is only useful when sorting is needed for other purposes.</p>
+    </section>
+
+    <section id="try">
+      <h2>Try It Yourself</h2>
+      <p>Enter numbers separated by commas (e.g., 4, 2, 7, 1, 9):</p>
+      <input type="text" id="arrayInput" placeholder="Enter numbers">
+      <br>
+      <button onclick="runAlgorithms()">Run Algorithms</button>
+      <div id="results"></div>
+    </section>
+  </div>
+
+  <script>
+    function bruteForceMinMax(arr) {
+      let min = arr[0];
+      let max = arr[0];
+      for (let i = 1; i < arr.length; i++) {
+        if (arr[i] < min) min = arr[i];
+        if (arr[i] > max) max = arr[i];
+      }
+      return { min, max };
+    }
+
+    function presortMinMax(arr) {
+      arr.sort((a, b) => a - b);
+      return { min: arr[0], max: arr[arr.length - 1] };
+    }
+
+    function divideAndConquerMinMax(arr, low = 0, high = arr.length - 1) {
+      if (low === high) return { min: arr[low], max: arr[low] };
+      if (high === low + 1) {
+        return arr[low] < arr[high]
+          ? { min: arr[low], max: arr[high] }
+          : { min: arr[high], max: arr[low] };
+      }
+      let mid = Math.floor((low + high) / 2);
+      let left = divideAndConquerMinMax(arr, low, mid);
+      let right = divideAndConquerMinMax(arr, mid + 1, high);
+      return {
+        min: Math.min(left.min, right.min),
+        max: Math.max(left.max, right.max)
+      };
+    }
+
+    function runAlgorithms() {
+      const input = document.getElementById("arrayInput").value;
+      const arr = input.split(',').map(Number).filter(n => !isNaN(n));
+      if (arr.length === 0) {
+        document.getElementById("results").innerHTML = '<p style="color: red;">Please enter valid numbers.</p>';
+        return;
+      }
+
+      let result = `<h3>Results:</h3>`;
+
+      // Brute-Force
+      let t1 = performance.now();
+      let brute = bruteForceMinMax([...arr]);
+      let t2 = performance.now();
+      result += `<p><strong>Brute-Force (O(n)):</strong> ${JSON.stringify(brute)} — <em>${(t2 - t1).toFixed(4)} ms</em></p>`;
+
+      // Presorting
+      let t3 = performance.now();
+      let presort = presortMinMax([...arr]);
+      let t4 = performance.now();
+      result += `<p><strong>Presorting-Based (O(n log n)):</strong> ${JSON.stringify(presort)} — <em>${(t4 - t3).toFixed(4)} ms</em></p>`;
+
+      // Divide and Conquer
+      let t5 = performance.now();
+      let divide = divideAndConquerMinMax([...arr]);
+      let t6 = performance.now();
+      result += `<p><strong>Divide-and-Conquer (O(n)):</strong> ${JSON.stringify(divide)} — <em>${(t6 - t5).toFixed(4)} ms</em></p>`;
+
+      document.getElementById("results").innerHTML = result;
+    }
+  </script>
+</body>
+</html>
